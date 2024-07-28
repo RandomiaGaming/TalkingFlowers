@@ -7,6 +7,7 @@ using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace TalkingFlowers
@@ -15,11 +16,19 @@ namespace TalkingFlowers
     {
         public static void Main(string[] args)
         {
-            TalkingFlower.Init();
-            TalkingFlower.Run();
+            FlowerRenderrer.Init();
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            long lastTime = 0;
+            while (true)
+            {
+                FlowerRenderrer.FlowerX = Cursor.Position.X;
+                FlowerRenderrer.FlowerY = Cursor.Position.Y;
+                while(stopwatch.ElapsedTicks - lastTime < 166666) { }
+                lastTime = stopwatch.ElapsedTicks;
+            }
         }
     }
-    public static class TalkingFlowerConfig
+   /* public static class TalkingFlowerConfig
     {
         public const string TalkingFlowerResourceName = "TalkingFlowerImage.png";
         public const float GravityForce = 9.8f;
@@ -174,42 +183,5 @@ namespace TalkingFlowers
 
             LastFrameTimeStamp = timeStamp;
         }
-    }
-    public sealed class TalkingFlowerRenderForm : Form
-    {
-        public TalkingFlowerRenderForm()
-        {
-            BackColor = Color.Magenta;
-            TransparencyKey = Color.Magenta;
-            FormBorderStyle = FormBorderStyle.None;
-            WindowState = FormWindowState.Maximized;
-            TopMost = true;
-
-            DoubleBuffered = true;
-
-            MouseDown += MouseDownEvent;
-            MouseUp += MouseUpEvent;
-            MouseLeave += MouseLeaveEvent;
-        }
-        private void MouseLeaveEvent(object sender, EventArgs e)
-        {
-            TalkingFlower.Drop();
-        }
-        private void MouseUpEvent(object sender, MouseEventArgs e)
-        {
-            TalkingFlower.Drop();
-        }
-        private void MouseDownEvent(object sender, MouseEventArgs e)
-        {
-            TalkingFlower.Grab();
-        }
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-
-            TalkingFlower.PaintMe(e.Graphics);
-
-            Invalidate();
-        }
-    }
+    }*/
 }
